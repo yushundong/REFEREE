@@ -6,7 +6,7 @@ Open-source code for paper *On Structural Explanation of Biases in Graph Neural 
 If you find it useful, please cite our paper. Thank you!
 
 ```
-@inproceedings{dong2022redress,
+@inproceedings{dong2022referee,
   title={On Structural Explanation of Biases in Graph Neural Networks},
   author={Dong, Yushun and Wang, Song and Wang, Yu and Derr, Tyler and Li, Jundong},
   booktitle={Proceedings of the 28th ACM SIGKDD Conference on Knowledge Discovery \& Data Mining},
