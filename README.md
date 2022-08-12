@@ -38,7 +38,7 @@ python explainer_main.py
 
 ## Log examples on German
 
-### An explanation example with GE-REFEREE
+### 1. An explanation example with GE-REFEREE
 
 
 Here we consider GE-REFEREE as an example to explain a trained GAT model (set dataset='german', method='GAT'). Run
@@ -66,7 +66,7 @@ Fitting completed.
 0  german       GNNExplainer      GAT          -19.8872        0.8200            18.2604          0.9400
 ```
 
-### An explanation example with PGE-REFEREE
+### 2. An explanation example with PGE-REFEREE
 
 Here we consider PGE-REFEREE as an example to explain a trained GAT model (set dataset='german', method='GAT'). Run
 ```
@@ -93,7 +93,7 @@ Fitting completed.
 0  german        PGExplainer      GAT          -15.6395        0.8600            18.1380          0.9200
 ```
 
-### Debiasing examples with GE-REFEREE
+### 3. Debiasing examples with GE-REFEREE
 
 Here we consider GE-REFEREE as an example to evaluate how it helps with GAT debiasing. First, we train the GAT model by running (set dataset='german', method='GAT', remove=True)
 ```
@@ -168,7 +168,7 @@ Fitting completed.
 ```
 
 
-### Debiasing examples with PGE-REFEREE
+### 4. Debiasing examples with PGE-REFEREE
 
 
 Here we consider PGE-REFEREE as an example to evaluate how it helps with GAT debiasing. First, we train the GAT model by running (set dataset='german', method='GAT', remove=True)
@@ -248,7 +248,7 @@ Fitting completed.
 
 ## Log examples on Bail
 
-### An explanation example with GE-REFEREE
+### 1. An explanation example with GE-REFEREE
 
 
 Here we consider GE-REFEREE as an example to explain a trained GAT model (set dataset='bail', method='GAT'). Run
@@ -276,7 +276,7 @@ Fitting completed.
 0    bail       GNNExplainer      GAT          -10.5899        0.8800            20.2563          0.8800
 ```
 
-### An explanation example with PGE-REFEREE
+### 2. An explanation example with PGE-REFEREE
 
 Here we consider PGE-REFEREE as an example to explain a trained GAT model (set dataset='bail', method='GAT'). Run
 ```
@@ -311,7 +311,7 @@ Fitting completed.
 
 ## Log examples on Credit
 
-### An explanation example with GE-REFEREE
+### 1. An explanation example with GE-REFEREE
 
 
 Here we consider GE-REFEREE as an example to explain a trained GAT model. Run (set dataset='credit', method='GAT')
@@ -339,7 +339,7 @@ Fitting completed.
 0  credit       GNNExplainer      GAT          -10.8445        0.8800            17.7664          0.8600
 ```
 
-### An explanation example with PGE-REFEREE
+### 2. An explanation example with PGE-REFEREE
 
 Here we consider PGE-REFEREE as an example to explain a trained GAT model. Run (set dataset='credit', method='GAT')
 ```
