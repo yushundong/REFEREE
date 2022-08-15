@@ -118,7 +118,7 @@ Start fitting ...
 Fitting completed.
 Results saved to log/german_GNNExplainer_GAT
 ```
-Finally, (1) we do configurations in configs.py to delete 5% nodes (set debias_ratio=5), and run
+Finally, (1) we do configurations in configs.py to operate on 5% nodes (set debias_ratio=5), and run
 ```
 python train.py
 ```
@@ -130,7 +130,7 @@ Fitting completed.
   dataset explainer_backbone GNN_type        SP        EO    Acc  Training Time
 0  german       GNNExplainer      GAT  0.191819  0.071307  0.774       1.519318
 ```
-(2) We do configurations in configs.py to delete 10% nodes (set debias_ratio=10), and run
+(2) We do configurations in configs.py to operate on 10% nodes (set debias_ratio=10), and run
 ```
 python train.py
 ```
@@ -142,7 +142,7 @@ Fitting completed.
   dataset explainer_backbone GNN_type        SP        EO    Acc  Training Time
 0  german       GNNExplainer      GAT  0.117999  0.065913  0.721       1.516468
 ```
-(3) We do configurations in configs.py to delete 15% nodes (set debias_ratio=15), and run
+(3) We do configurations in configs.py to operate on 15% nodes (set debias_ratio=15), and run
 ```
 python train.py
 ```
@@ -154,7 +154,7 @@ Fitting completed.
   dataset explainer_backbone GNN_type        SP        EO    Acc  Training Time
 0  german       GNNExplainer      GAT  0.069705  0.016371  0.745       1.511232
 ```
-(4) We do configurations in configs.py to delete 20% nodes (set debias_ratio=20), and run
+(4) We do configurations in configs.py to operate on 20% nodes (set debias_ratio=20), and run
 ```
 python train.py
 ```
@@ -194,7 +194,7 @@ Start fitting ...
 Fitting completed.
 Results saved to log/german_PGExplainer_GAT
 ```
-Finally, (1) we do configurations in configs.py to delete 5% nodes (set debias_ratio=5), and run
+Finally, (1) we do configurations in configs.py to operate on 5% nodes (set debias_ratio=5), and run
 ```
 python train.py
 ```
@@ -206,7 +206,7 @@ Fitting completed.
   dataset explainer_backbone GNN_type        SP        EO    Acc  Training Time
 0  german        PGExplainer      GAT  0.161057  0.059283  0.744       1.563453
 ```
-(2) We do configurations in configs.py to delete 10% nodes (set debias_ratio=10), and run
+(2) We do configurations in configs.py to operate on 10% nodes (set debias_ratio=10), and run
 ```
 python train.py
 ```
@@ -218,7 +218,7 @@ Fitting completed.
   dataset explainer_backbone GNN_type        SP      EO    Acc  Training Time
 0  german        PGExplainer      GAT  0.148901  0.0637  0.721       1.560527
 ```
-(3) We do configurations in configs.py to delete 15% nodes (set debias_ratio=15), and run
+(3) We do configurations in configs.py to operate on 15% nodes (set debias_ratio=15), and run
 ```
 python train.py
 ```
@@ -230,7 +230,7 @@ Fitting completed.
   dataset explainer_backbone GNN_type        SP        EO    Acc  Training Time
 0  german        PGExplainer      GAT  0.110706  0.036959  0.732       1.529081
 ```
-(4) We do configurations in configs.py to delete 20% nodes (set debias_ratio=20), and run
+(4) We do configurations in configs.py to operate on 20% nodes (set debias_ratio=20), and run
 ```
 python train.py
 ```
