@@ -15,7 +15,7 @@ If you find it useful, please cite our paper. Thank you!
 ```
 
 ## Environment
-Experiments are carried out on a Tesla V100 GPU with Cuda 11.0.
+Experiments are carried out on a Tesla V100 GPU with Cuda 11.6.
 
 Dependencies can be found in requirements.txt.
 
