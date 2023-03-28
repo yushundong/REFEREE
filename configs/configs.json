@@ -1,0 +1,106 @@
+{
+  "node_list_credit_GNNExplainer_GAT": [1195, 2216, 1840, 28, 1373, 591, 1052, 2520, 2039, 2168, 2549, 716, 2529, 2801, 1190, 1134, 1846, 1547, 391, 2152, 1522, 148, 2677, 2930, 1873, 2516, 683, 894, 721, 2156, 662, 2534, 1822, 139, 2926, 1506, 1415, 2149, 1824, 776, 353, 1047, 1716, 110, 1251, 1157, 1723, 2190, 2678, 531],
+  "german_GNNExplainer_GAT": {
+    "fidelity_unfair_weight": 0.0001,
+    "WD_unfair_weight": 0.1,
+    "fidelity_fair_weight": 5.0,
+    "WD_fair_weight": 50000000.0,
+    "KL_weight": 1e+10,
+    "num_epochs": 2
+  },
+  "node_list_german_GNNExplainer_GAT": [836, 882, 684, 876, 542, 537, 472, 227, 57, 448, 804, 846, 589, 867, 165, 187, 909, 147, 357, 999, 565, 324, 159, 353, 798, 910, 32, 714, 777, 377, 131, 515, 151, 460, 411, 742, 244, 257, 707, 599, 972, 265, 396, 362, 130, 690, 70, 973, 602, 388],
+  "bail_PGExplainer_GAT": {
+    "fidelity_unfair_weight": 1.0,
+    "WD_unfair_weight": 10000.0,
+    "fidelity_fair_weight": 10.0,
+    "WD_fair_weight": 10000000.0,
+    "KL_weight": 100000000.0,
+    "num_epochs": 2
+  },
+  "credit_GNNExplainer_GAT": {
+    "fidelity_unfair_weight": 100.0,
+    "WD_unfair_weight": 10000000.0,
+    "fidelity_fair_weight": 100.0,
+    "WD_fair_weight": 10000000.0,
+    "KL_weight": 100000000.0,
+    "num_epochs": 5
+  },
+  "node_list_credit_PGExplainer_GAT": [160, 1071, 839, 1803, 1788, 929, 1000, 229, 2376, 1303, 2193, 140, 2490, 53, 2481, 1802, 2169, 807, 2121, 1249, 983, 2770, 2680, 1847, 1825, 2902, 901, 679, 1105, 683, 2031, 776, 152, 2200, 2416, 1319, 2185, 2039, 1445, 2041, 2430, 218, 403, 1846, 1125, 963, 2677, 946, 2040, 1577],
+  "german_PGExplainer_GAT": {
+    "fidelity_unfair_weight": 100.0,
+    "WD_unfair_weight": 10000.0,
+    "fidelity_fair_weight": 5.0,
+    "WD_fair_weight": 50000000.0,
+    "KL_weight": 1e+25,
+    "num_epochs": 2
+  },
+  "node_list_bail_PGExplainer_GAT":  [851, 691, 1053, 1720, 1040, 1384, 2732, 2660, 2987, 1131, 2775, 469, 894, 2679, 2852, 586, 136, 1226, 831, 2962, 1982, 987, 311, 2720, 109, 1400, 934, 2389, 2647, 1097, 1301, 1006, 2430, 1188, 478, 540, 1717, 200, 2099, 276, 2051, 1954, 661, 337, 1716, 2144, 1688, 2976, 870, 633],
+  "credit_PGExplainer_GAT": {
+    "fidelity_unfair_weight": 100.0,
+    "WD_unfair_weight": 10000000000.0,
+    "fidelity_fair_weight": 100.0,
+    "WD_fair_weight": 100000000000.0,
+    "KL_weight": 100000000.0,
+    "num_epochs": 5
+  },
+  "node_list_german_PGExplainer_GAT": [321, 705, 184, 754, 639, 80, 398, 43, 677, 610, 41, 430, 581, 559, 543, 72, 845, 961, 932, 659, 128, 280, 448, 244, 201, 565, 9, 779, 550, 370, 459, 847, 453, 676, 172, 276, 170, 252, 59, 270, 646, 528, 666, 742, 50, 301, 572, 109, 876, 126],
+  "bail_GNNExplainer_GAT": {
+    "fidelity_unfair_weight": 100.0,
+    "WD_unfair_weight": 10000000000.0,
+    "fidelity_fair_weight": 100.0,
+    "WD_fair_weight": 10000000.0,
+    "KL_weight": 100000000.0,
+    "num_epochs": 2
+  },
+  "node_list_bail_GNNExplainer_GAT": [691, 2660, 1152, 2732, 1967, 1384, 2987, 2775, 1131, 1040, 2679, 136, 2121, 894, 93, 586, 1720, 2852, 2839, 2221, 2943, 439, 2825, 711, 1054, 2583, 998, 258, 1185, 68, 1223, 2419, 2853, 523, 2058, 275, 2, 1514, 986, 1009, 2524, 1867, 2717, 639, 2605, 2678, 394, 625, 2461, 979],
+  "german_GNNExplainer_20": {
+    "lr": 0.005,
+    "num_epochs": 100,
+    "select": 15
+  },
+  "german_PGExplainer_20": {
+    "lr": 0.01,
+    "num_epochs": 100,
+    "select": 100
+  },
+  "german_GNNExplainer_0": {
+    "lr": 0.005,
+    "num_epochs": 100,
+    "select": 0
+  },
+  "german_GNNExplainer_5": {
+    "lr": 0.01,
+    "num_epochs": 100,
+    "select": 60
+  },
+  "german_GNNExplainer_10": {
+    "lr": 0.005,
+    "num_epochs": 100,
+    "select": 30
+  },
+  "german_GNNExplainer_15": {
+    "lr": 0.005,
+    "num_epochs": 100,
+    "select": 60
+  },
+  "german_PGExplainer_0": {
+    "lr": 0.005,
+    "num_epochs": 100,
+    "select": 0
+  },
+  "german_PGExplainer_5": {
+    "lr": 0.01,
+    "num_epochs": 100,
+    "select": 30
+  },
+  "german_PGExplainer_10": {
+    "lr": 0.05,
+    "num_epochs": 100,
+    "select": 50
+  },
+  "german_PGExplainer_15": {
+    "lr": 0.05,
+    "num_epochs": 100,
+    "select": 5
+  }
+}

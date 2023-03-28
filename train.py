@@ -28,6 +28,7 @@ import json
 from tqdm import tqdm
 warnings.filterwarnings("ignore")
 
+
 def fair_metric(output,x,labels,idx):
     sens=x[:,-1].squeeze().detach()
     val_y = labels.cpu().numpy()
@@ -107,7 +108,7 @@ def train_node_classifier(G, labels, model, args):
         torch.save({"epoch": -1, "model_type": args.method, "optimizer": optimizer, "model_state": model_state_dict, "optimizer_state": optimizer_state_dict, "cg": cg_data}, filename, pickle_protocol=4)
 
     return [fair_metric(ypred.squeeze(), x[0], labels_total[0], list(range(num_nodes))) + [
-        train_acc.item()*0.8+valid_acc.item()*0.1+test_acc.item()*0.1] + [time.time() - total_begin_time]]
+            train_acc.item() * 0.8 + valid_acc.item() * 0.1 + test_acc.item() * 0.1] + [time.time() - total_begin_time]]
 
 
 def evaluate_node(ypred, labels, train_idx, test_idx):
@@ -365,7 +366,8 @@ def task_real_data(args):
     return train_node_classifier(G, labels, model, args)
 
 def main():
-
+    #for lr in [0.01, 0.05, 0.005]:
+    #    for select in [5,10,15,20,25,30,40, 50, 60,100]:
     seed=100
     random.seed(seed)
     np.random.seed(seed)
@@ -373,6 +375,19 @@ def main():
     torch.cuda.manual_seed(seed)
 
     prog_args = configs.arg_parse()
+
+    #if prog_args.dataset=='german' and prog_args.remove==False:  #for debias
+    #    prog_args.num_epochs=100
+
+        #prog_args.lr=0.01
+
+
+
+    #if prog_args.remove==True:
+    #    prog_args.lr=lr
+    #    prog_args.select=select
+    #    prog_args.num_epochs=100
+
 
     print('Start fitting ...')
     result=task_real_data(prog_args)
@@ -386,6 +401,7 @@ def main():
                                       'GNN_type': prog_args.method,
                                         'Acc': result[0][2],
                                       'Training Time': result[0][3]}])
+    #print('lr:{} select: {}'.format(lr, select))
     print(result_print)
 
 if __name__ == "__main__":

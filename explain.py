@@ -103,10 +103,17 @@ class REFEREE:
         self.label = label
         self.pred = pred
         self.train_idx = train_idx
-        if args.dataset!='german':
+
+
+        if args.dataset=='credit':
             self.test_idx=[one for one in list(range(self.feat[0].shape[0])) if one not in self.train_idx]
+        elif args.dataset=='german':
+            np.random.seed(0)
+            self.test_idx=np.random.choice(list(range(self.feat[0].shape[0])),size=500 if args.baseline else 200) #200 #100
         else:
-            self.test_idx=list(range(self.feat[0].shape[0]))
+            np.random.seed(0)
+            self.test_idx=np.random.choice(list(range(self.feat[0].shape[0])),size=1000 if args.baseline else 500)
+
         self.node_idx=[]
 
         self.n_hops = args.num_gc_layers
@@ -133,12 +140,14 @@ class REFEREE:
 
     def explain(self, node_idx):
         seed = 100
+
+
         random.seed(seed)
         np.random.seed(seed)
         torch.manual_seed(seed)
         torch.cuda.manual_seed(seed)
 
-        node_idx_new, sub_adj, sub_feat, sub_label, neighbors = self.extract_neighborhood(node_idx)
+        node_idx_new, sub_adj, sub_feat, sub_label, neighbors = self.extract_neighborhood(node_idx, max_size=10 if self.args.dataset=='bail' else None)
         sub_label = np.expand_dims(sub_label, axis=0)
 
         sub_adj = np.expand_dims(sub_adj, axis=0)
@@ -154,6 +163,7 @@ class REFEREE:
         explainer_fair = ExplainModule(adj=adj, x=x, model=self.model, label=label, args=self.args)
         if self.args.gpu:
             explainer_fair = explainer_fair.cuda()
+
 
         explainer_unfair = ExplainModule(adj=adj, x=x, model=self.model, label=label, args=self.args)
         if self.args.gpu:
@@ -171,12 +181,13 @@ class REFEREE:
             new_tensor_pred[self.test_idx][new_index], cuda=True)[0]
         self.start_wass_dis_ori.append(wass_dis.cpu().detach().item())
 
+
         for epoch in range(self.args.num_epochs):
 
             explainer_unfair.optimizer.zero_grad()
             _, _ = explainer_unfair(node_idx_new)
             ypred_unfair, adj_atts = explainer_unfair.cal_WD_ypred(node_idx_new, threshold=self.args.threshold)
-            loss = explainer_unfair.loss(ypred_unfair, pred_label, node_idx_new) * self.args.fidelity_unfair_weight
+            loss = explainer_unfair.loss(ypred_unfair, pred_label, node_idx_new) * self.args.fidelity_fair_weight
 
             index=self.feat[0][self.test_idx][:,-1]==1-self.feat[0][node_idx][-1]
             new_tensor_pred=self.tensor_pred[0].clone()
@@ -184,11 +195,12 @@ class REFEREE:
             new_index=self.feat[0][self.test_idx][:,-1]==self.feat[0][node_idx][-1]
             wass_dis=wasserstein(self.tensor_pred[0][self.test_idx][index],new_tensor_pred[self.test_idx][new_index],cuda=True)[0]
 
+
             WD_loss_unfair_raw=wass_dis
             WD_loss_unfair=WD_loss_unfair_raw
 
             fidelity_loss_unfair=loss.item()
-            loss -= wass_dis*self.args.WD_unfair_weight
+            loss -= wass_dis*self.args.WD_fair_weight
 
             index=self.feat[0][self.test_idx][:,-1]==1-self.feat[0][node_idx][-1]
             new_tensor_pred=self.tensor_pred[0].clone()
@@ -227,6 +239,7 @@ class REFEREE:
 
             loss += wass_dis*self.args.WD_fair_weight
 
+
             index=self.feat[0][self.test_idx][:,-1]==1-self.feat[0][node_idx][-1]
             new_tensor_pred=self.tensor_pred[0].clone()
             new_tensor_pred[node_idx]=ypred
@@ -253,6 +266,7 @@ class REFEREE:
         masked_adj=masked_adj_fair
         masked_adj_unfair = (explainer_unfair.masked_adj[0].cpu().detach().numpy() * sub_adj.squeeze())
 
+
         self.node_idx.append(node_idx)
         self.explain_true.append(0)
 
@@ -271,13 +285,14 @@ class REFEREE:
              self.start_wass_dis_ori,
                                   self.start_wass_dis_ori,self.start_wass_dis,self.start_wass_dis_unfair, self.node_idx])
 
-        fname = 'neighbors_' + 'node_idx_'+str(node_idx)+'.npy'
-        with open(os.path.join(self.args.logdir, self.folder_name,fname), 'wb') as outfile:
-            np.save(outfile, np.asarray(neighbors.tolist()+[node_idx_new]))
+        if self.args.dataset=='german':
+            fname = 'neighbors_' + 'node_idx_'+str(node_idx)+'.npy'
+            with open(os.path.join(self.args.logdir, self.folder_name,fname), 'wb') as outfile:
+                np.save(outfile, np.asarray(neighbors.tolist()+[node_idx_new]))
 
-        fname = 'masked_adj_' + 'node_idx_'+str(node_idx)+'.npy'
-        with open(os.path.join(self.args.logdir, self.folder_name,fname), 'wb') as outfile:
-            np.save(outfile, np.asarray([masked_adj.copy(),masked_adj_fair.copy(),masked_adj_unfair.copy()]))
+            fname = 'masked_adj_' + 'node_idx_'+str(node_idx)+'.npy'
+            with open(os.path.join(self.args.logdir, self.folder_name,fname), 'wb') as outfile:
+                np.save(outfile, np.asarray([masked_adj.copy(),masked_adj_fair.copy(),masked_adj_unfair.copy()]))
 
         if self.args.explain_all==True:
             fname = 'explain_result.npy'
@@ -287,15 +302,21 @@ class REFEREE:
 
         return masked_adj
 
+
+
     def explain_nodes_gnn_stats(self, node_indices):
+
         for node_idx in tqdm(node_indices):
-            self.explain(node_idx)
+            if self.args.dataset=='credit':
+                self.explain(self.test_idx[node_idx])
+            else:
+                self.explain(node_idx)
 
         explain_acc=np.array([self.explain_true,self.explain_true_wass,self.explain_true_minuswass,self.wass_dis_ori,self.wass_dis,self.wass_dis_unfair,
                                   self.start_wass_dis_ori,self.start_wass_dis,self.start_wass_dis_unfair, self.node_idx])
 
         if self.args.explain_all==True:
-            fname = 'explain_result.npy'
+            fname = './explain_result_{}_{}_{}_{}.npy'.format(self.args.dataset,self.args.explainer_backbone, 'base' if self.args.baseline else 'ref', len(self.test_idx))
             with open(os.path.join(self.args.logdir, self.folder_name,fname), 'wb') as outfile:
                 np.save(outfile, np.asarray(explain_acc.copy()))
 
@@ -303,12 +324,14 @@ class REFEREE:
         wass_dis_unfair = np.array(explain_acc[5])
         ori_end_dis = np.array(explain_acc[6])
 
+
+
         result=pd.DataFrame([{'dataset':self.args.dataset, 'explainer_backbone':self.args.explainer_backbone, 'GNN_type':self.args.method,
-                              'Delta B (Reduced)': '{:.4f}'.format(-np.mean((ori_end_dis - wass_dis) / ori_end_dis) * 1e4),
-                              'fair_fidelity': '{:.4f}'.format(np.mean(explain_acc[1])),
-                              'Delta B (Promoted)': '{:.4f}'.format(-np.mean((ori_end_dis - wass_dis_unfair) / ori_end_dis) * 1e4),
-                              'unfair_fidelity': '{:.4f}'.format(np.mean(explain_acc[2])),
-                              }])
+                                              'Delta B (Reduced)': '{:.4f}'.format(-np.mean((ori_end_dis - wass_dis) / ori_end_dis) * 1e4),
+                                              'fair_fidelity': '{:.4f}'.format(np.mean(explain_acc[1])),
+                                              'Delta B (Promoted)': '{:.4f}'.format(-np.mean((ori_end_dis - wass_dis_unfair) / ori_end_dis) * 1e4),
+                                              'unfair_fidelity': '{:.4f}'.format(np.mean(explain_acc[2])),
+                                              }])
 
         print('Fitting completed.')
         if self.args.explain_all:
@@ -316,10 +339,18 @@ class REFEREE:
         else:
             print(result)
 
-    def extract_neighborhood(self, node_idx):
+    def extract_neighborhood(self, node_idx, max_size=None):
         neighbors_adj_row = self.neighborhoods[0][node_idx, :]
         node_idx_new = sum(neighbors_adj_row[:node_idx])
         neighbors = np.nonzero(neighbors_adj_row)[0]
+
+        if max_size!=None:
+            neighbors=neighbors.tolist()
+            neighbors.remove(node_idx)
+            neighbors=neighbors[:max_size]
+            neighbors.append(node_idx)
+            node_idx_new=len(neighbors)-1
+
         sub_adj = self.adj[0][neighbors][:, neighbors]
         sub_feat = self.feat[0, neighbors]
         sub_label = self.label[0][neighbors]
@@ -382,13 +413,22 @@ class ExplainModule(nn.Module):
         x = self.x.cuda() if self.args.gpu else self.x
         self.masked_adj = self._masked_adj()
 
-        ori_mask = self.sym_mask
+        ori_mask = self.sym_mask  # * self.adj.cuda()  #modified
         ranking = ori_mask.flatten()
-        torch.sort(ranking)
+        ranking, _=torch.sort(ranking)
 
-        if threshold < len(ranking):
-            threshold_value = ranking[-threshold]
-            self.masked_adj = self.adj.cuda() * torch.where(ori_mask>threshold_value, ori_mask, 0)
+
+        if threshold < len(ranking):  #modified
+            threshold_value = ranking[-min(threshold, len(ranking))]
+            #threshold_value=0
+            #print(threshold_value)
+            #print(torch.where(ori_mask>threshold_value, ori_mask, 0))
+
+            #print(self.adj.shape)
+            #print(self.adj.sum())
+            self.masked_adj = self.adj.cuda() * torch.where(ori_mask>threshold_value, ori_mask, torch.tensor(0.0).cuda())
+
+
 
         new_adj = self.masked_adj
 
